@@ -15,36 +15,31 @@ The official PyTorch implementation of Paper "Split Coordinate Attention for Bui
     ```Bash
     conda activate YourEnvName
     ```
-3. Install the dependencies.
+3. Clone the repository and change the directory.
+   ```Bash
+   git clone https://github.com/AiEson/SCANet-CD.git
+   cd SCANet
+   ```
+4. Install the dependencies.
    ```Bash
    pip install -r requirements.txt
    ```
-4. Clone the repository and change the directory.
-   ```Bash
-   git clone https://github.com/AiEson/SCANet.git
-   cd SCANet
-   ```
+
 ### Training
 #### Dataset Preparation
-1. WHU Dataset: http://gpcv.whu.edu.cn/data/building_dataset.html
-2. Massachusetts Buildings Dataset: 
-   - Original: https://www.cs.toronto.edu/~vmnih/data/
-   - Kaggle: https://www.kaggle.com/datasets/balraj98/massachusetts-buildings-dataset
+1. WHU Dataset: http://gpcv.whu.edu.cn/data/Building%20change%20detection%20dataset_add.zip
 ---
 #### Run the following command to train the model.
 - For WHU Dataset:
   ```Bash
-  bash scripts/SCANet_whu.sh 1 12344
+  bash scripts/SCANet_whu.sh
   ```
-- For Massachusetts Buildings Dataset:
-  ```Bash
-   bash scripts/SCANet_mass.sh 1 12344
-   ```
+
 
 ## The Core Code of SCANet
 We utilized the [Segmentation Models](https://segmentation-models-pytorch.readthedocs.io/en/latest/index.html) library as our segmentation model repository and made modifications to its source code to adapt it to our model.
 
-The modified code is placed in the `models/my_smp/` directory, with implementations of various encoders located under the `models/my_smp/encoders/` directory. We implemented SCANet in the [`models/my_smp/encoders/scanet.py`](https://github.com/AiEson/SCANet/blob/main/models/my_smp/encoders/scanet.py) file, enabling easy replacement of the decoder without any modifications to the decoder.
+The modified code is placed in the `models/my_smp/` directory, with implementations of various encoders located under the `models/my_smp/encoders/` directory. We implemented SCANet in the [`models/my_smp/encoders/scanet.py`](https://github.com/AiEson/SCANet-CD/blob/main/models/my_smp/encoders/scanet.py) file, enabling easy replacement of the decoder without any modifications to the decoder.
 
 ### Call SCANet Model Anywhere
 ```Python
@@ -66,10 +61,13 @@ model = smp.UnetPlusPlus(
 ```
 
 ### Models and Params
+⚠️: The parameters of SCANet are twice that of the original model because SCANet-CD is a dual-branch network (which has two encoders, and concats the features of the two encoders in the decoder).
+
 | **Encoder Name** | **Params(M)** |
 |------------------|---------------|
-| scanet-14d       | 34            |
-| scanet-26d       | 40.5          |
-| scanet-50d       | 50.9          |
-| scanet-101e      | 73.2          |
+| scanet-14d       | 34*2            |
+| scanet-26d       | 40.5*2          |
+| scanet-50d       | 50.9*2          |
+| scanet-101e      | 73.2*2          |
 ---
+
